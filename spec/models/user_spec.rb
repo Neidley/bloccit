@@ -5,6 +5,7 @@ RSpec.describe User, type: :model do
   # Shoulda tests for name
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_length_of(:name).is_at_least(1) }
+  it { is_expected.to allow_value("bloccit user").for(:email) }
 
   # Shoulda tests for email
   it { is_expected.to validate_presence_of(:email) }
@@ -35,4 +36,5 @@ RSpec.describe User, type: :model do
       expect(user_with_invalid_email).to_not be_valid
     end
   end
+
 end
