@@ -57,6 +57,14 @@ member = User.create!(
   password: 'helloworld'
 )
 
+# Create an admin user
+admin = User.create!(
+  name: 'Andrew Neidley',
+  email: 'neidz44@gmail.com',
+  password: 'helloworld',
+  role: 'admin'
+)
+
 puts "Seed finished"
 puts "#{User.count} users created"
 puts "#{Topic.count} topics created"
