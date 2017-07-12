@@ -8,7 +8,7 @@ RSpec.describe Post, type: :model do
   let (:topic) { Topic.create!(name: name, description: description) }
 
   let(:user) { User.create!(name: "Bloccit User", email: "user@bloccit.com", password: "helloworld") }
-  let(:post) { topic.posts.create!(title: title, body:body, user: user) }
+  let(:post) { topic.posts.create!(title: title, body: body, user: user) }
 
 
   it { is_expected.to belong_to(:topic) }
@@ -34,7 +34,7 @@ RSpec.describe Post, type: :model do
   describe "voting" do
     before do
       3.times { post.votes.create!(value: 1, user: user) }
-      2.times { post.votes.create!(value: -1, user: user) }
+      2.times { post.votes.create!(value: -1, user: user) }#
       @up_votes = post.votes.where(value: 1).count
       @down_votes = post.votes.where(value: -1).count
     end
@@ -54,6 +54,22 @@ RSpec.describe Post, type: :model do
     describe "#points" do
       it "returns the sum of all down and up votes" do
         expect( post.points ).to eq(@up_votes - @down_votes)
+      end
+    end
+
+    describe "#create_vote" do
+      it "sets the post up_votes to 1" do
+        expect(post.up_votes).to eq(1)
+      end
+
+      it "calls #create_vote when the post is created" do
+        post = topic.posts.new(title: RandomData.random_sentence, body: RandomData.random_paragraph, user: user)
+        expect(post).to receive(:create_vote)
+        post.save
+      end
+
+      it "associates the vote with the owner of the post" do
+        expect(post.votes.first.user).to eq(post.user)
       end
     end
 
