@@ -20,7 +20,37 @@
 </div>
 
 <h2>Posts</h2>
-<%= render @user.posts %>
+<% if @user.posts.first == nil %>
+  <%= user_has_no_posts %>
+<% else  %>
+  <%= render @user.posts %>
+<% end %>
 
 <h2>Comments</h2>
-<%= render @user.comments %>
+<% if @user.posts.first == nil %>
+  <%= user_has_no_comments %>
+<% else %>
+  <%= render @user.comments %>
+<% end %>
+
+<h2>Favorite Posts<h2>
+  <% @user.favorites.reverse.each do |favorite| %>
+  <div class="media">
+    <div class="media-body">
+      <h4 class="media-heading">
+      </h4>
+      <small>
+        <% avatar_url = favorite.post.user.avatar_url(36) %>
+        <% if avatar_url %>
+          <div class="media-left">
+            <%= image_tag avatar_url, class: 'media-object' %>
+          </div>
+          <%= favorite.post.title %>
+          <p><%= favorite.post.votes.count %> votes</p>
+          <p><%= favorite.post.comments.count %> comments</p>
+        <p>Added to favorites <%= time_ago_in_words(favorite.created_at) %> ago</p> <br>
+      </small>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
